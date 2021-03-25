@@ -1,18 +1,17 @@
 import "reflect-metadata";
-require("dotenv").config();
-const express = require("express");
-const session = require("express-session");
-const connectRedis = require("connect-redis");
-const RateLimit = require("express-rate-limit");
-const RateLimitRedisStore = require("rate-limit-redis");
+import dotenv from "dotenv";
+import express from "express";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import RateLimit from "express-rate-limit";
+import RateLimitRedisStore from "rate-limit-redis";
 import { Application } from "express";
-import bodyParser from "body-parser";
 import morgan from "morgan";
 import { Routes } from "./routes/Routes";
 import { redis } from "./redis";
 import { redisSessionPrefix, listingCacheKey } from "./constants";
 import { rateLimiterUsingThirdParty } from "./middlewares";
-
+dotenv.config();
 class App {
   public app: Application;
   public routePrv: Routes;
@@ -22,9 +21,7 @@ class App {
   constructor(private port?: number | string) {
     this.app = express();
 
-    this.app.use(bodyParser.json());
-
-    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(express.json());
 
     this.settings();
 
@@ -42,7 +39,7 @@ class App {
   private middleware(): void {
     this.app.use(morgan("dev"));
     this.app.use(express.json());
-    //this.app.use(rateLimiterUsingThirdParty);
+    this.app.use(rateLimiterUsingThirdParty);
   }
 
   async listen(): Promise<void> {
@@ -64,7 +61,7 @@ class App {
     this.app.use(
       session({
         store: new this.RedisStore({
-          client: redis as any,
+          client: redis,
           prefix: redisSessionPrefix,
         }),
         name: "qid",

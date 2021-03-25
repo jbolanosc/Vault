@@ -131,3 +131,7 @@ export async function registerAccount(req: Request, res: Response) {
     return res.json(errorResponse(err.toString())).status(500);
   }
 }
+
+export const pagination = (req: Request, res: Response) => {
+  return res.send(res.paginatedResult);
+};

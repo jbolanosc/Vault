@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { Warehouse } from "../../entity/Warehouse";
 import { User } from "../../entity/User";
+import { Client } from "../../entity/Client";
+import { Storage } from "../../entity/Storage";
 import { successResponse, errorResponse } from "../../util/formatResponse";
 import { inputError, successUpdate } from "./errors/warehouseErrors";
 import _ from "underscore";
@@ -85,10 +87,12 @@ export const getUserWarehouses = async (req: Request, res: Response) => {
 
 export const getClientWarehouses = async (req: Request, res: Response) => {
   try {
-    const client = req.body;
-    if (client) {
+    const clientId = req.params.id;
+    if (clientId) {
+      const user = await User.findOne({ where: { id: clientId } });
+
       const warehouses = await getRepository(Warehouse).find({
-        where: { client: client },
+        where: { user: user },
       });
       if (!_.isEmpty(warehouses))
         return res.json(errorResponse("No warehouses found")).status(400);

@@ -12,7 +12,7 @@ import {
 } from "../../controllers/warehouse/WarehouseController";
 
 warehouseRouter
-  .get("/client/:id/warehouse", getClientWarehouses)
+  .get("/client/:id", getClientWarehouses)
   .get("/", getWarehouses)
   .get("/user/:id", getUserWarehouses)
   .get("/:id/storage", getWarehouseStorages)

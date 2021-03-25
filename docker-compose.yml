@@ -10,9 +10,21 @@ services:
       POSTGRES_PASSWORD: "test"
       POSTGRES_DB: "test"
 
-  redis:
-    image: "bitnami/redis:latest"
+  redis_db:
+    image: "redis:latest"
     ports:
       - "6379:6379"
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
+
+  vault:
+    build: "./"
+    environment:
+      JWT_SECRET: "sadkfiek"
+      PORT: 3001
+      REDIS_URL: "redis://redis_db:6379"
+      NODE_ENV: "production"
+    ports:
+      - "7500:3001"
+    depends_on:
+      - postgres
