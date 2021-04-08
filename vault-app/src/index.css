@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-sans box-border;
+}
+
+.btn {
+  @apply rounded-sm py-2 px-3 uppercase font-bold cursor-pointer tracking-wider text-white;
+}
