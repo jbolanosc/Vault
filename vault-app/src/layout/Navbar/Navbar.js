@@ -54,6 +54,22 @@ const Navbar = () => {
                 Services
               </Link>
             </li>
+            <li>
+              <Link
+                to="/register"
+                className="lg:p-4 py-2 my-1 px-0 btn bg-teal-700 hover:bg-teal-900"
+              >
+                Register
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/login"
+                className="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:text-blue-300 font-bold"
+              >
+                Login
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>

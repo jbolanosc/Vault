@@ -6,9 +6,17 @@ import AmenitiesPreview from "../../Components/Amenities/amenitiesPreview";
 
 const WarehouseForm = () => {
   const [image, dispatch] = useReducer(rootReducer, initialState);
-  const [formData, setFormData] = useState({});
-  const [amenitie, setAmenitie] = useState({
+  const [formData, setFormData] = useState({
     name: "",
+    description: "",
+    space: 0,
+    monthPrice: 0,
+    dayPrice: 0,
+    bathrooms: 0,
+    floors: 0,
+  });
+  const [amenitie, setAmenitie] = useState({
+    amenitieName: "",
     quantity: null,
   });
   const [preview, setPreview] = useState({
@@ -27,8 +35,9 @@ const WarehouseForm = () => {
     e.preventDefault();
     setPreview({
       ...preview,
-      amenities: [...preview.amenities, e.target.value],
+      amenities: [...preview.amenities, amenitie],
     });
+    console.log(preview.amenities);
   };
 
   const handleMultipleUpload = (e) => {
@@ -37,16 +46,34 @@ const WarehouseForm = () => {
     setPreview({ ...preview, images: [...preview.images, urls] });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
   const cancelPreview = (e) => {
     setPreview({ ...preview, image: "" });
   };
 
-  const handleChange = (e) => {};
+  const cancelAmenitiePreview = (amenitie) => {
+    let items = preview.amenities.filter(
+      (item) => amenitie.amenitieName !== item.amenitieName
+    );
+    setPreview({ ...preview, amenities: items });
+  };
+
+  const handleAmenitieChange = (e) => {
+    setAmenitie({ ...amenitie, [e.target.name]: e.target.value });
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center">
       <h2 className="xl:text-4xl text-2xl font-bold">Warehouse Form</h2>
-      <form className="grid md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 gap-3">
+      <form className="grid lg:grid-cols-3 md:grid-cols-2 xs:grid-cols-1 sm:grid-cols-1 gap-3">
         {/*COL 1 */}
         <div className="shadow-2xl p-2 flex flex-col items-center">
           <div>
@@ -58,6 +85,8 @@ const WarehouseForm = () => {
               required
               minLength="4"
               maxLength="50"
+              onChange={handleChange}
+              value={formData.name}
             />
           </div>
           <div>
@@ -69,6 +98,8 @@ const WarehouseForm = () => {
               className="w-full p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               min="0"
+              onChange={handleChange}
+              value={formData.space}
             />
           </div>
           <div>
@@ -80,10 +111,12 @@ const WarehouseForm = () => {
               required
               minLength="4"
               maxLength="50"
+              onChange={handleChange}
+              value={formData.description}
             />
           </div>
           <div>
-            <label className="block mb-2 text-primary">Monthly Price</label>
+            <label className="block mb-2 text-primary">Monthly Price $</label>
             <input
               id="monthPrice"
               name="monthPrice"
@@ -91,10 +124,12 @@ const WarehouseForm = () => {
               className="w-2/4 p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               min="0"
+              onChange={handleChange}
+              value={formData.monthPrice}
             />
           </div>
           <div>
-            <label className="block mb-2 text-primary">Daily Price</label>
+            <label className="block mb-2 text-primary">Daily Price $</label>
             <input
               id="dayPrice"
               name="dayPrice"
@@ -102,6 +137,8 @@ const WarehouseForm = () => {
               className="w-2/4 p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               min="0"
+              onChange={handleChange}
+              value={formData.dayPrice}
             />
           </div>
           <div className="my-2 flex items-center justify-center bg-grey-lighter">
@@ -123,6 +160,7 @@ const WarehouseForm = () => {
           <div className="flex flex-wrap">
             {preview.image ? (
               <ImagePreview
+                key={preview.image}
                 image={preview.image}
                 cancelPreview={cancelPreview}
               />
@@ -130,7 +168,7 @@ const WarehouseForm = () => {
           </div>
         </div>
         {/*COL 2 */}
-        <div className="shadow-2xl p-2 flex flex-col items-center">
+        <div className="shadow-2xl p-2 flex flex-col items-center justify-center">
           <div>
             <label className="block mb-2 text-primary">Bathrooms</label>
             <input
@@ -140,6 +178,8 @@ const WarehouseForm = () => {
               className="w-2/4 p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               min="0"
+              onChange={handleChange}
+              value={formData.bathrooms}
             />
           </div>
           <div>
@@ -151,41 +191,61 @@ const WarehouseForm = () => {
               className="w-2/4 p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               min="0"
+              onChange={handleChange}
+              value={formData.floors}
             />
           </div>
           <div className="flex flex-col my-4">
             <label className="block mb-2 text-primary">New Amenitie</label>
             <input
               id="amenitie"
-              name="amenitie"
+              name="amenitieName"
               type="text"
               className="w-2/4 p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               minLength="2"
               placeholder="Description"
+              onChange={handleAmenitieChange}
             />
             <label className="block mb-2 text-primary">Quantity</label>
             <input
               id="Quantity"
-              name="Quantity"
+              name="quantity"
               type="text"
               className="w-2/4 p-2 mb-2 text-black border-b-2 border-black outline-none focus:bg-gray-300"
               required
               minLength="2"
               placeholder="Quantity"
+              onChange={handleAmenitieChange}
             />
-            <button className="m-4 btn bg-teal-700 hover:bg-teal-900">
+            <button
+              className="m-4 btn bg-teal-700 hover:bg-teal-900"
+              onClick={handleNewAmenitie}
+            >
               Add Amenitie
             </button>
           </div>
         </div>
         {/*COL 3 */}
-        <div className="shadow-2xl p-2 flex flex-col items-center">
+        <div className="shadow-2xl p-2 flex flex-col items-center 2xl:col-span-1 lg:col-span-1 xl:col-span-1 md:col-span-2">
           <h4 className="text-2xl p-2 font-bold">Amenities</h4>
-          {preview.amenities.length > 0 ? <AmenitiesPreview /> : null}
+          {preview.amenities.length > 0
+            ? preview.amenities.map((amenitie) => (
+                <AmenitiesPreview
+                  key={amenitie.amenitieName}
+                  amenitie={amenitie}
+                  cancelAmenitiePreview={cancelAmenitiePreview}
+                />
+              ))
+            : null}
         </div>
       </form>
-      <button className="m-4 btn bg-teal-700 hover:bg-teal-900">Submit</button>
+      <button
+        className="m-4 btn bg-teal-700 hover:bg-teal-900"
+        onClick={handleSubmit}
+      >
+        Submit
+      </button>
     </div>
   );
 };
